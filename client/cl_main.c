@@ -4314,7 +4314,7 @@ void CL_Init (void)
 	Cbuf_Execute ();
 
 	Con_Init ();	
-#if defined __linux__ || defined __sgi || defined __FreeBSD__
+#if defined __linux__ || defined __sgi || defined __FreeBSD__ || defined __OpenBSD__
 	S_Init (true);	
 
 	VID_Init ();

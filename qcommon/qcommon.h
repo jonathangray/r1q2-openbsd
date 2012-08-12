@@ -96,6 +96,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		#define CPUSTRING "Unknown"
 	#endif
 
+#elif defined __OpenBSD__
+
+#define BUILDSTRING "OpenBSD"
+
+	#ifdef __i386__
+		#define CPUSTRING "i386"
+	#elif defined __x86_64__
+		#define CPUSTRING "x86_64"
+	#else
+		#define CPUSTRING "Unknown"
+	#endif
+
 #else	// !WIN32
 
 	#error Unknown architecture, please update qcommon.h!

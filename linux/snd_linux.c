@@ -6,7 +6,13 @@
 #include <sys/mman.h>
 #include <sys/shm.h>
 #include <sys/wait.h>
+#ifdef __linux__
 #include <linux/soundcard.h>
+#elif __FreeBSD__
+#include <sys/soundcard.h>
+#else
+#include <soundcard.h>
+#endif
 #include <stdio.h>
 
 #include "../client/client.h"

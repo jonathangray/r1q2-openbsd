@@ -22,7 +22,7 @@ byte *membase;
 int maxhunksize;
 int curhunksize;
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
 #define MMAP_ANON MAP_ANON
 #else
 #define MMAP_ANON MAP_ANONYMOUS
@@ -58,7 +58,7 @@ void *Hunk_Alloc (int size)
 
 int Hunk_End (void)
 {
-#ifndef __FreeBSD__
+#ifdef __linux__
 	byte *n;
 
 	n = mremap(membase, maxhunksize, curhunksize + sizeof(int), 0);
