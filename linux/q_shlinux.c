@@ -56,17 +56,71 @@ void *Hunk_Alloc (int size)
 	return buf;
 }
 
-int Hunk_End (void)
+int
+Hunk_End(void)
 {
-#ifdef __linux__
-	byte *n;
+	byte *n = NULL;
 
-	n = mremap(membase, maxhunksize, curhunksize + sizeof(int), 0);
-	if (n != membase)
-		Sys_Error("Hunk_End:  Could not remap virtual block (%d)", errno);
-	*((int *)membase) = curhunksize + sizeof(int);
+#if defined(__linux__)
+	n = (byte *)mremap(membase, maxhunksize, curhunksize + sizeof(int), 0);
+#elif defined(__FreeBSD__)
+	size_t old_size = maxhunksize;
+	size_t new_size = curhunksize + sizeof(int);
+	void *unmap_base;
+	size_t unmap_len;
+
+	new_size = round_page(new_size);
+	old_size = round_page(old_size);
+
+	if (new_size > old_size)
+	{
+		n = 0; /* error */
+	}
+	else if (new_size < old_size)
+	{
+		unmap_base = (caddr_t)(membase + new_size);
+		unmap_len = old_size - new_size;
+		n = munmap(unmap_base, unmap_len) + membase;
+	}
+#else
+#ifndef round_page
+#define round_page(x) (((size_t)(x) + (page_size - 1)) / page_size) * \
+	    page_size
 #endif
-	
+
+	size_t old_size = maxhunksize;
+	size_t new_size = curhunksize + sizeof(int);
+	void *unmap_base;
+	size_t unmap_len;
+	long page_size;
+
+	page_size = sysconf(_SC_PAGESIZE);
+	if (page_size == -1) {
+		Sys_Error("Hunk_End: sysconf _SC_PAGESIZE failed (%d)", errno);
+	}
+
+	new_size = round_page(new_size);
+	old_size = round_page(old_size);
+
+	if (new_size > old_size)
+	{
+		n = 0; /* error */
+	}
+	else if (new_size < old_size)
+	{
+		unmap_base = (caddr_t)(membase + new_size);
+		unmap_len = old_size - new_size;
+		n = munmap(unmap_base, unmap_len) + membase;
+	}
+#endif
+
+	if (n != membase)
+	{
+		Sys_Error("Hunk_End: Could not remap virtual block (%d)", errno);
+	}
+
+	*((int *)membase) = curhunksize + sizeof(int);
+
 	return curhunksize;
 }
 
