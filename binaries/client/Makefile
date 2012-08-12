@@ -34,6 +34,9 @@ ifeq ($(shell uname),FreeBSD)
 LDFLAGS+=-lexecinfo
 endif
 
+ifeq ($(shell uname),OpenBSD)
+LDFLAGS+=-lossaudio
+endif
 
 quake2: $(quake2_OBJ)
 	$(CC) -g -o $@ $^ $(LDFLAGS)

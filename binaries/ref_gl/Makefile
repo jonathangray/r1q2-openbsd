@@ -1,6 +1,7 @@
 VPATH=../../ref_gl ../../linux ../../game
 
 CFLAGS+=-fPIC $(shell sdl-config --cflags)
+CFLAGS+=$(shell pkg-config --cflags libpng)
 
 ref_gl_SRC:=gl_draw.c gl_image.c gl_light.c gl_mesh.c gl_model.c gl_rmain.c\
 			gl_rmisc.c gl_rsurf.c gl_warp.c gl_sdl.c glob.c q_shared.c\
@@ -17,7 +18,8 @@ TARGETS:=ref_gl.so ref_gl-combine.so
 
 include ../make.inc
 
-LDFLAGS+=$(shell sdl-config --libs) -lm -lGL -ljpeg -lpng12
+LDFLAGS+=$(shell sdl-config --libs) -lm -lGL -ljpeg
+LDFLAGS+=$(shell pkg-config --libs libpng) -lpthread
 
 ref_gl.so: $(ref_gl_OBJ)
 	$(CC) -shared -g -o $@ $^ $(LDFLAGS)
