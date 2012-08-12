@@ -16,12 +16,16 @@
 #include <sys/wait.h>
 #include <sys/mman.h>
 #include <errno.h>
-#include <execinfo.h>
 #include <sys/utsname.h>
 #define __USE_GNU 1
 #define _GNU_SOURCE
 #include <link.h>
+
+#ifndef __OpenBSD__
+#include <execinfo.h>
 #include <sys/ucontext.h>
+#endif
+
 #include <sys/resource.h>
 
 //for old headers
@@ -225,6 +229,7 @@ void Sys_Backtrace (int sig, siginfo_t *siginfo, void *secret)
 			 "and any other pertinent information.\n"
 			 "\n");
 
+#ifndef __OpenBSD__
 	size = backtrace (array, sizeof(array)/sizeof(void*));
 
 #ifndef __x86_64__
@@ -237,6 +242,7 @@ void Sys_Backtrace (int sig, siginfo_t *siginfo, void *secret)
 
 	for (i = 0; i < size; i++)
 		fprintf (stderr, "%.2zd: %s\n", i, strings[i]);
+#endif
 
 	fprintf (stderr, "\nVersion: " R1BINARY " " VERSION " (" BUILDSTRING " " CPUSTRING ") " RELEASESTRING "\n");
 
