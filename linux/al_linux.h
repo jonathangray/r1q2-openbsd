@@ -23,11 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define __AL_LINUX_H__
 
 
-#ifndef __linux__
-#error "You should not be including this file on this platform"
-#endif
-
-
 typedef struct {
 	void *ALlib;
 
@@ -41,4 +36,4 @@ qboolean	AL_Init (void);
 void		AL_Shutdown (void);
 
 
-#endif	// __ALW_WIN_H__
+#endif	// __AL_LINUX_H

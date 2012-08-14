@@ -193,7 +193,7 @@ void S_Init (int fullInit)
 	s_show = Cvar_Get ("s_show", "0", 0);
 	s_ambient = Cvar_Get ("s_ambient", "1", 0);
 
-	cv = Cvar_Get ("s_initsound", "1", 0);
+	cv = Cvar_Get ("s_initsound", "2", 0);
 	if (!cv->intvalue)
 		Com_Printf ("not initializing.\n", LOG_CLIENT|LOG_NOTICE);
 	else

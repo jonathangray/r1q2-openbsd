@@ -16,10 +16,8 @@
 
 #ifdef _WIN32
 #include "../win32/alw_win.h"
-#endif
-#ifdef __linux__
+#else
 #include "../linux/al_linux.h"
-#endif
 #endif
 
 typedef struct
@@ -161,16 +159,11 @@ extern alConfig_t		alConfig;
 #define ALimp_Shutdown					ALW_Shutdown
 
 #else
-#ifdef __linux__
 
-#define AL_DRIVER_OPENAL	"/usr/lib/libopenal.so"
+#define AL_DRIVER_OPENAL	"libopenal.so"
 
 #define ALimp_Init						AL_Init
 #define ALimp_Shutdown					AL_Shutdown
-
-#else
-
-#error "ALimp_* not available for this platform"
 
 #endif
 #endif

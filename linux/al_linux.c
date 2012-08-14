@@ -41,23 +41,6 @@ static void AL_InitExtensions (void)
 	}
 
 	Com_Printf("Initializing OpenAL extensions\n", LOG_CLIENT);
-
-	if (qalIsExtensionPresent("EAX2.0"))
-	{
-		if (s_openal_eax->intvalue)
-		{
-			alConfig.eax = true;
-
-			qalEAXSet = (ALEAXSET)qalGetProcAddress("EAXSet");
-			qalEAXGet = (ALEAXGET)qalGetProcAddress("EAXGet");
-
-			Com_Printf("...using EAX2.0\n", LOG_CLIENT);
-		}
-		else
-			Com_Printf("...ignoring EAX2.0\n", LOG_CLIENT);
-	}
-	else
-		Com_Printf("...EAX2.0 not found\n", LOG_CLIENT);
 }
 
 /*
